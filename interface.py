@@ -5,7 +5,6 @@ import tkinter
 import os
 from PIL import Image, ImageTk
 from tkinter import messagebox
-from tkinter import ttk
 
 
 class HangmanGame:
@@ -67,7 +66,6 @@ class HangmanGame:
 
     def replace_letter(self, letter, dict_labels):
         # check if letter is in word
-        print(self.list_letters_final)
         if letter in self.word_chosen[0]:
             for label in dict_labels:
                 # check if we have the word in the label
@@ -83,10 +81,9 @@ class HangmanGame:
                     in this case maybe we can remove for the list the letter and at the last check if we have an emtpy list
                     '''
                     self.list_letters_final = [let for let in self.list_letters_final if let != letter]
-                    print(self.list_letters_final)
                     # check if you won
-                    if self.check_winner():
-                        return
+            if self.check_winner():
+                return
         else:
             # in this case we need to update the counter and make the button red
             self.remaining_tries -= 1
@@ -137,9 +134,6 @@ class HangmanGame:
             global_label = f"global_label{i + 1}"
             globals()[global_label] = f"Label_{i + 1}"
             labels.append(globals()[global_label])
-        print(labels)
-        numbers = self.split_names(labels)
-        print(numbers)
         root = Tk()
         root.title("Hangman Game")
         root.iconbitmap(self.file_ico)
@@ -168,7 +162,6 @@ class HangmanGame:
                                   relief=SUNKEN, font=("Georgia", "16", "bold"),
                                   anchor=E, cursor="target",
                                   bg="#e8f0bb")
-                print(self.word_chosen[1][i])
                 x_initial += 40
                 labels[i].place(x=x_initial, y=y_initial)
                 dictionary_label_letter.update({labels[i]: self.word_chosen[0][i]})
@@ -375,7 +368,6 @@ class HangmanGame:
         '''here we will create a labelframe in which we will have a number of labels equal to the number of letters'''
 
         # this will be added in function to put on screen
-        print(dictionary_label_letter)
         correct_word_frame = LabelFrame(root, fg="#31322a", bg="#e8f0bb", font=("Helvetica", 25, "bold"), bd=5,
                                         cursor="target", width=550, height=100, labelanchor="n", text="CORRECT WORD",
                                         relief=tkinter.GROOVE)

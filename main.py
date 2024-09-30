@@ -1,6 +1,4 @@
 import os
-
-from reader import FileReader
 from interface import HangmanGame
 
 
