@@ -1,6 +1,7 @@
 from reader import FileReader
 import constants
 from tkinter import *
+from tkinter.simpledialog import askstring
 import tkinter
 import os
 from PIL import Image, ImageTk
@@ -22,6 +23,30 @@ class HangmanGame:
         for letter in self.word_chosen[0]:
             self.list_letters.append(letter)
         self.list_letters_final = [letter for letter in self.list_letters if letter != " "]
+
+    def ask_solution(self):
+        global solution
+        solution = askstring("Solution", "Type the solution").upper()
+        if solution == self.word_chosen[0]:
+            messagebox.showinfo(title="WORD DISCOVERED", message="Congratulations, you discovered the word!!")
+            correct_word_frame.place(x=90, y=20)
+            # here we will put the correct word
+            label_correct_word = Label(correct_word_frame, text=self.word_chosen[0], justify="center",
+                                       font=("Helvetica", 19, "bold"),
+                                       cursor="trek", fg="#4cd283", bg="#e8f0bb")
+            label_correct_word.grid(row=0, column=0, padx=40)
+            # make all buttons disabled to not continue
+            for button in self.dict_buttons:
+                self.dict_buttons[button]["state"] = tkinter.DISABLED
+            return True
+        else:
+            # in this case we need to update the counter and make the button red
+            self.remaining_tries -= 1
+            label_tries["text"] = "TRIES LEFT: " + str(self.remaining_tries)
+            messagebox.showinfo(title="INCORRECT WORD",
+                                message="Sorry, the word is not correct")
+            if self.check_loser():
+                return
 
     def check_winner(self):
         # all letters completed
@@ -51,7 +76,7 @@ class HangmanGame:
                                        font=("Helvetica", 19, "bold"),
                                        cursor="trek", fg="#4cd283", bg="#e8f0bb")
             label_correct_word.grid(row=0, column=0, padx=40)
-            #put the hanged image
+            # put the hanged image
             hanged_image = ImageTk.PhotoImage(Image.open(self.file_png))
             hang_frame = Label(image=hanged_image)
             hang_frame.image = hanged_image
@@ -62,7 +87,6 @@ class HangmanGame:
             return True
         else:
             return False
-
 
     def replace_letter(self, letter, dict_labels):
         # check if letter is in word
@@ -358,6 +382,11 @@ class HangmanGame:
         self.dict_buttons.update({"Y": buttonY})
         self.dict_buttons.update({"W": buttonW})
         self.dict_buttons.update({"Z": buttonZ})
+        # button for the answer
+        button_answer = Button(root, text="Solution", foreground="#3c313c", bg="#c1cf8b",
+                               padx=5, pady=5, font=("Georgia", "14", "bold"), width=13,
+                               bd=9, command=lambda: self.ask_solution())
+        button_answer.place(x=650, y=485)
 
         '''frame to remind nr of tries'''
 
